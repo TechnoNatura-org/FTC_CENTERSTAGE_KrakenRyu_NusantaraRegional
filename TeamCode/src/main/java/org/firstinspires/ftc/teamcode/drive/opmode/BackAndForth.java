@@ -44,9 +44,29 @@ public class BackAndForth extends LinearOpMode {
 
         waitForStart();
 
+        int cycles = 0;
+        double startTime = 0.0;
+        double finishTime = 0.0;
+
         while (opModeIsActive() && !isStopRequested()) {
+            telemetry.addData("======== Cycle : ", cycles);
+
+            startTime = getRuntime();
+
             drive.followTrajectory(trajectoryForward);
+
+            finishTime = getRuntime();
+
+            telemetry.addData("Elapsed Time for forward ", finishTime - startTime);
+
             drive.followTrajectory(trajectoryBackward);
+
+            telemetry.addData("Elapsed Time after Backward", finishTime - startTime);
+
+            telemetry.addData("======== END CYCLE OF : ", cycles);
+            telemetry.addLine();
+
+            cycles += 1;
         }
     }
 }
