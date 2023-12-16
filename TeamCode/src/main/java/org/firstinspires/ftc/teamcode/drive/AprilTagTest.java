@@ -72,6 +72,8 @@ public class AprilTagTest extends LinearOpMode {
 
         }
 
+        visionPortal.resumeStreaming();
+
         while (opModeIsActive()) {
             telemetry.addLine("Started!!");
 
@@ -83,6 +85,8 @@ public class AprilTagTest extends LinearOpMode {
                 if (myAprilTagDetection.metadata != null) {  // This check for non-null Metadata is not needed for reading only ID code.
                     myAprilTagIdCode = myAprilTagDetection.id;
                     String aprilName = myAprilTagDetection.metadata.name;
+//                    String aprilName = myAprilTagDetection.metadata.fieldOrientation;
+
 
                     telemetry.addData("AprilTag ID", myAprilTagIdCode);
                     telemetry.addData("AprilTag Name", aprilName);

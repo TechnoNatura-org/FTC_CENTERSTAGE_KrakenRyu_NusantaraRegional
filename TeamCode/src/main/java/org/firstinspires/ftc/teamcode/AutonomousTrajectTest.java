@@ -5,10 +5,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -16,7 +14,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Config
-@Autonomous(group = "drive")
+@Autonomous(name = "AutonomousTrajectTest", group = "drive")
 public class AutonomousTrajectTest extends LinearOpMode {
 
     private Telemetry telemetry;
@@ -29,17 +27,35 @@ public class AutonomousTrajectTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-//        intake = hardwareMap.get(DcMotorEx.class, "intake");
-//        lifter1 = hardwareMap.get(DcMotorEx.class, "lifter1");
-//        lifter2 = hardwareMap.get(DcMotorEx.class, "lifter2");
-//        flipper = hardwareMap.get(DcMotorEx.class, "flipper");
-
-        telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
+//        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(11.86, 60.80, Math.toRadians(270.00)))
-                .splineTo(new Vector2d(35.59, 34.43), Math.toRadians(0.00))
+//        TrajectorySequence untitled0 = drive.trajectorySequenceBuilder(new Pose2d(11.86, 60.80, Math.toRadians(270.00)))
+//                .splineTo(new Vector2d(35.59, 34.43), Math.toRadians(0.00))
+//                .build();
+//        drive.setPoseEstimate(untitled0.start());
+//
+//        TrajectorySequence untitled1 = drive.trajectorySequenceBuilder(new Pose2d(13.02, -61.62, Math.toRadians(90.00)))
+//                .splineTo(new Vector2d(11.70, -35.92), Math.toRadians(92.94))
+//                .splineTo(new Vector2d(-21.42, -37.57), Math.toRadians(178.57))
+//                .splineTo(new Vector2d(-55.69, -38.55), Math.toRadians(182.80))
+//                .splineTo(new Vector2d(-54.04, -12.03), Math.toRadians(7.91))
+//                .splineTo(new Vector2d(-30.65, -13.68), Math.toRadians(-7.85))
+//                .splineTo(new Vector2d(-13.35, -10.87), Math.toRadians(-3.07))
+//                .splineTo(new Vector2d(53.22, 26.20), Math.toRadians(90.00))
+//                .build();
+        TrajectorySequence untitled0 =  drive.trajectorySequenceBuilder(new Pose2d(11.37, -62.28, Math.toRadians(92.05)))
+                .splineTo(new Vector2d(11.86, -36.08), Math.toRadians(90.00))
+                .splineTo(new Vector2d(52.23, -41.52), Math.toRadians(4.64))
+                .build();
+        TrajectorySequence Autonomous =  drive.trajectorySequenceBuilder(new Pose2d(11.70, -62.11, Math.toRadians(90.00)))
+                .splineTo(new Vector2d(11.70, -33.78), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-12.03, -60.30), Math.toRadians(181.30))
+                .splineTo(new Vector2d(-57.01, -58.82), Math.toRadians(181.55))
+                .splineTo(new Vector2d(-59.31, -45.14), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-59.81, 4.12), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-61.78, 11.70), Math.toRadians(184.48))
                 .build();
         drive.setPoseEstimate(untitled0.start());
 
@@ -48,11 +64,11 @@ public class AutonomousTrajectTest extends LinearOpMode {
 
         drive.followTrajectorySequence(untitled0);
 
-        Pose2d poseEstimate = drive.getPoseEstimate();
-        telemetry.addData("finalX", poseEstimate.getX());
-        telemetry.addData("finalY", poseEstimate.getY());
-        telemetry.addData("finalHeading", poseEstimate.getHeading());
-        telemetry.update();
+//        Pose2d poseEstimate = drive.getPoseEstimate();
+//        telemetry.addData("finalX", poseEstimate.getX());
+//        telemetry.addData("finalY", poseEstimate.getY());
+//        telemetry.addData("finalHeading", poseEstimate.getHeading());
+//        telemetry.update();
 
 
         while (!isStopRequested() && opModeIsActive()) ;
