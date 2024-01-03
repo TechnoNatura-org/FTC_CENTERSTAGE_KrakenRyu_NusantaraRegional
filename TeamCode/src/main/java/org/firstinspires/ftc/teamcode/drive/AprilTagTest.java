@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -64,6 +65,12 @@ public class AprilTagTest extends LinearOpMode {
         List<AprilTagDetection> aprilTagDetections;  // list of all detections
         int myAprilTagIdCode;
 
+        telemetry.addData("AprilTag ID", "Init");
+        telemetry.addData("AprilTag Name", "Init");
+        telemetry.addData("Metadata X","init");
+        telemetry.addData("Metadata Y", "init");
+        telemetry.addData("Metadata Z", "init");
+
         waitForStart();// ID code of current detection, in for() loop
 
         if (isStopRequested()) {
@@ -84,17 +91,40 @@ public class AprilTagTest extends LinearOpMode {
             for (AprilTagDetection myAprilTagDetection : aprilTagDetections) {
                 if (myAprilTagDetection.metadata != null) {  // This check for non-null Metadata is not needed for reading only ID code.
                     myAprilTagIdCode = myAprilTagDetection.id;
+//                    myAprilTagDetection.rawPose.
                     String aprilName = myAprilTagDetection.metadata.name;
-//                    String aprilName = myAprilTagDetection.metadata.fieldOrientation;
+                    byte bVal = myAprilTagDetection.metadata.distanceUnit.bVal;
+                    float x = myAprilTagDetection.metadata.fieldOrientation.x;
+                    float y = myAprilTagDetection.metadata.fieldOrientation.y;
+                    float z = myAprilTagDetection.metadata.fieldOrientation.z;
+                    float w = myAprilTagDetection.metadata.fieldOrientation.y;
 
 
                     telemetry.addData("AprilTag ID", myAprilTagIdCode);
                     telemetry.addData("AprilTag Name", aprilName);
+                    telemetry.addData("Metadata X", x);
+                    telemetry.addData("Metadata Y", y);
+                    telemetry.addData("Metadata Z", z);
 
                     // Now take action based on this tag's ID code, or store info for later action.
 
                 }
             }
+
+            List<Recognition> currentRecognitions = tfodProcessor.getRecognitions();
+            telemetry.addData("# Objects Detected", currentRecognitions.size());
+
+            // Step through the list of recognitions and display info for each one.
+            for (Recognition recognition : currentRecognitions) {
+                double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+                double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+
+                telemetry.addData(""," ");
+                telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+                telemetry.addData("- Position", "%.0f / %.0f", x, y);
+                telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+            }   // end for() loop
+
 
             telemetry.update();
 

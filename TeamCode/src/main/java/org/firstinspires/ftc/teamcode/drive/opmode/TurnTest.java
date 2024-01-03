@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 @Config
 @Autonomous(group = "drive")
 public class TurnTest extends LinearOpMode {
-    public static double ANGLE = 90; // deg
+    public static double ANGLE = 20; // deg
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,6 +22,8 @@ public class TurnTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        drive.turn(Math.toRadians(ANGLE));
+        while (opModeIsActive() && !isStopRequested()) {
+            drive.turn(Math.toRadians(ANGLE));
+        }
     }
 }
