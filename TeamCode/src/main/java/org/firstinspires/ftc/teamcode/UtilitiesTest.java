@@ -82,8 +82,8 @@ public class UtilitiesTest extends LinearOpMode {
             }
             telemetry.addData("leftFront ", Motors.get(0));
             telemetry.addData("leftRear ", Motors.get(1));
-            telemetry.addData("rightFront ", Motors.get(2));
-            telemetry.addData("rightRear ", Motors.get(3));
+            telemetry.addData("rightRear ", Motors.get(2));
+            telemetry.addData("rightFront ", Motors.get(3));
 
             telemetry.update();
 //

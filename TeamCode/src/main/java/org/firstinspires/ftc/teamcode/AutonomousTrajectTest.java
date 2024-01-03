@@ -80,7 +80,7 @@ public class AutonomousTrajectTest extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-        drive.turn(Math.toRadians(90));
+//        drive.turn(Math.toRadians(90));
 //        drive.followTrajectory(untitled1);
 
 //        Pose2d poseEstimate = drive.getPoseEstimate();

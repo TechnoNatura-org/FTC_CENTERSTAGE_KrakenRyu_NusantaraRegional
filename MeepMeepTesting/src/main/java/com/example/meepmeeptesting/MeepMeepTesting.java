@@ -27,8 +27,18 @@ public class MeepMeepTesting {
                 .setConstraints(
                         23, 60, Math.toRadians(180), Math.toRadians(180), 11)
                 .followTrajectorySequence(drive ->
-                         drive.trajectorySequenceBuilder(new Pose2d(11.75, 63.27, Math.toRadians(270)))
-                                 .forward(30)
+                         drive.trajectorySequenceBuilder(new Pose2d(-36.53, 64, Math.toRadians(270)))
+
+                                 // normal position  (forward by 30)
+
+                                 .forward(40)
+
+                                 // temporal marker check their  using color sensor
+
+                                 .back(10)
+                                 // set position\
+
+
 //                                 .turn(Math.toRadians(-90))
 //                                 .forward(3)
 //                                 .back(3)
@@ -41,23 +51,36 @@ public class MeepMeepTesting {
 
                                  // robot at front and the team prop on the side of steel bar
                                  .strafeRight(5)
+                                 // temporal marker put white pixel
+
+
 //                                 .back(6)
 //                                 .turn(Math.toRadians(50))
 //
 //                                 .forward(5)
 //
 //
-//                                 // Taro di belakang
-                                 .splineToLinearHeading(new Pose2d(24.6, 10.61), Math.toRadians(358.53))
-                                 .splineToLinearHeading(new Pose2d(48, 35.14), Math.toRadians(-2.86))
+//                                 // Move to backdrop
+                                 .splineToLinearHeading(new Pose2d(-24.28, 10.24, Math.toRadians(0)), Math.toRadians(-3.69))
+
+                                 .splineToLinearHeading(new Pose2d(24.6, 10.61, Math.toRadians(0)), Math.toRadians(358.53))
+                                 .splineToLinearHeading(new Pose2d(48, 35.14, Math.toRadians(0)), Math.toRadians(-2.86))
                                  .strafeRight(6.5)
                                  .turn(Math.toRadians(180))
-
-
-
-
-//
-//
+                                 // temporal marker here to put pixel on backdrop
+                                 .splineToLinearHeading(new Pose2d(40, 34.16, Math.toRadians(180)), Math.toRadians(196.58))
+                                 .splineToLinearHeading(new Pose2d(23, 11.06, Math.toRadians(180)), Math.toRadians(175.52))
+                                 .splineToLinearHeading(new Pose2d(-5.28, 11.06, Math.toRadians(180)), Math.toRadians(182.92))
+                                 .splineToLinearHeading(new Pose2d(-26.75, 10.40, Math.toRadians(180)), Math.toRadians(180.00))
+                                 .splineToLinearHeading(new Pose2d(-63.91, 11.39, Math.toRadians(180)), Math.toRadians(180.00))
+                                    //temporal marker here to sucks pixel
+                                 .splineToLinearHeading(new Pose2d(-31.38, 11.23, Math.toRadians(180)), Math.toRadians(0.58))
+                                 .splineToSplineHeading(new Pose2d(25.10, 11.39, Math.toRadians(180)), Math.toRadians(1.53))
+                                 .splineToLinearHeading(new Pose2d(49.21, 35.67, Math.toRadians(180)), Math.toRadians(-2.73))
+                                 // temporal marker to put pixel
+                                 .splineToLinearHeading(new Pose2d(46.90, 60.44, Math.toRadians(180)), Math.toRadians(0.00))
+                                 .splineToLinearHeading(new Pose2d(60.61, 61.10, Math.toRadians(180)), Math.toRadians(-2.60))
+                                 .turn(Math.toRadians(180))
 //                                 .splineTo(new Vector2d(11.61, 30), Math.toRadians(270.00))
 //                                 .strafeTo(new Vector2d(45,35))
 //                                 .splineToSplineHeading(new Pose2d(45, 35, Math.toRadians(0)), Math.toRadians(0))

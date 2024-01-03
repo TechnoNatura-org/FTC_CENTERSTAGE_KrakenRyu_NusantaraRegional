@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-@Autonomous(name="Autonomous_AtCenter", group = "IFR2024")
-public class Autonomous_AtCenter extends LinearOpMode {
+@Autonomous(name="Autonomous_AtCenter", group = "IDDESQ")
+public class Autonomous_RobotPositionTop extends LinearOpMode {
 
     private SampleMecanumDrive drive;
     private String alliance = "";

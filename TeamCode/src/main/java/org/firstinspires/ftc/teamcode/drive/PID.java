@@ -21,6 +21,9 @@ public class PID {
 
     private DcMotorEx motor = null;
 
+    private boolean isEnabled = true;
+
+
     public PID(double kP, double kI, double kD, double tolerance) {
         timer = new ElapsedTime();
         Kp = kP;
@@ -65,6 +68,18 @@ public class PID {
         timer = new ElapsedTime();
         lastError= 0;
     }
+
+    public void enablePID() {
+        isEnabled = true;
+    }
+    public void disablePID() {
+        isPIDRunning = false;
+        isEnabled = false;
+    }
+    public boolean isPIDEnabled() {
+        return isEnabled;
+    }
+
 
     public double getTargetPos() {
         return reference;

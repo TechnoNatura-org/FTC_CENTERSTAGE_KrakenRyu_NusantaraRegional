@@ -65,7 +65,7 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 1 * (MAX_RPM / 60 * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI);;
+    public static double MAX_VEL = 23.305489563560343;
     public static double MAX_ACCEL = 60;
     public static double MAX_ANG_VEL = Math.toRadians(120);
     public static double MAX_ANG_ACCEL = Math.toRadians(120);

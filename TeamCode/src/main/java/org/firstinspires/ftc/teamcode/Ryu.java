@@ -36,6 +36,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.drive.PID;
+
 @TeleOp(name="Ryu", group="A")
 
 public class Ryu extends OpMode
@@ -58,8 +60,13 @@ public class Ryu extends OpMode
     private DcMotor lifter2 = null;
 
     private Servo flipper2 = null;
+    private Servo droneLauncher = null;
+    private Servo pixelServo = null;
 
     private double defspeed = 0;
+
+    public static PIDCoefficients Flipper_PIDCoef = new PIDCoefficients(0.00001,0.000002,0.007);
+    public static PID flipper_PID = new PID(Flipper_PIDCoef, 2.0);
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -77,6 +84,11 @@ public class Ryu extends OpMode
         backleft = hardwareMap.get(DcMotor.class, "backleft");
 
         flipper = hardwareMap.get(DcMotor.class, "flipper");
+        flipper2 = hardwareMap.get(Servo.class, "flipper2");
+
+        droneLauncher = hardwareMap.get(Servo.class, "droneLauncher");
+        pixelServo = hardwareMap.get(Servo.class, "pixelServo");
+
         intake = hardwareMap.get(DcMotor.class, "intake");
 
         lifter1 = hardwareMap.get(DcMotor.class, "lifter1");
@@ -91,19 +103,13 @@ public class Ryu extends OpMode
         backright.setDirection(DcMotor.Direction.REVERSE);
 
         flipper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        lifter1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lifter2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        flipper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        flipper.setDirection(DcMotor.Direction.REVERSE);
 
+        lifter2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lifter1.setDirection(DcMotor.Direction.REVERSE);
 
 //        lifter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        LIFTERS_PID_CONTROLLER.setOutputBounds(0, 1);
-        LIFTERS_PID_CONTROLLER.setInputBounds( 20, 4139);
-        LIFTERS_PID_CONTROLLER.setTargetPosition(3000);
-        LIFTERS_PID_CONTROLLER.setTargetVelocity(20);
-        LIFTERS_PID_CONTROLLER.setTargetAcceleration(20);
-
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -143,11 +149,28 @@ public class Ryu extends OpMode
 
 
         if (gamepad2.a){
-            flipper.setPower(0.4);
+            flipper_PID.enablePID();
+            flipper_PID.setTargetPos(140);
         }else if (gamepad2.y){
-            flipper.setPower(-0.4);
-        }else{
-            flipper.setPower(0.0);
+            flipper_PID.enablePID();
+            flipper_PID.setTargetPos(-140);
+        }
+
+
+
+        if (flipper_PID.isPIDEnabled()) {
+            double flipperCommand = flipper_PID.update(flipper.getCurrentPosition());
+            flipper.setPower(flipperCommand);
+        }else {
+            if (gamepad2.dpad_up) {
+                flipper_PID.disablePID();
+                flipper_PID.setTargetPos(0);
+                flipper.setPower(0.4);
+            }else if (gamepad2.dpad_down) {
+                flipper_PID.disablePID();
+                flipper_PID.setTargetPos(0);
+                flipper.setPower(-0.4);
+            }
         }
 
         if (gamepad1.right_bumper){
@@ -159,10 +182,10 @@ public class Ryu extends OpMode
         }
 
         //lifter
-        if(gamepad2.right_stick_y < 0){
+        if(gamepad2.right_stick_y > 0){
             lifter1.setPower(gamepad2.right_stick_y);
             lifter2.setPower(gamepad2.right_stick_y);
-        }else if(gamepad2.right_stick_y > 0){
+        }else if(gamepad2.right_stick_y < 0){
             lifter1.setPower(gamepad2.right_stick_y);
             lifter2.setPower(gamepad2.right_stick_y);
         }else{
@@ -170,12 +193,11 @@ public class Ryu extends OpMode
             lifter2.setPower(0);
         }
 
-        double command = LIFTERS_PID_CONTROLLER.update(lifter2.getCurrentPosition());
-//        lifter2.setPower(command);
-        telemetry.addData("Lifter2 ", lifter2.getCurrentPosition());
-        telemetry.addData("Lifter2 Command", command);
-        telemetry.addData("Flipper", flipper.getCurrentPosition());
-        telemetry.addData("Right Stick y", gamepad2.right_stick_y);
+        if (gamepad2.b){
+            flipper2.setPosition(0.10);
+        }else if (gamepad2.x) {
+            flipper2.setPosition(0.4);
+        }
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());

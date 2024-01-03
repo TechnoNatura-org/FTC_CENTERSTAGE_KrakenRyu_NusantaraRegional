@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="Autonomous_AtLeft", group = "IFR2024")
-public class Autonomous_AtLeft extends LinearOpMode {
+public class Autonomous_RobotPositionBottom extends LinearOpMode {
 
     private SampleMecanumDrive drive;
     private String alliance = "";
@@ -59,25 +59,6 @@ public class Autonomous_AtLeft extends LinearOpMode {
 
 //        drive.setPoseEstimate(new Pose2d(0,0, Math.toRadians(90)));
 
-        TrajectorySequence untitled0 =  drive.trajectorySequenceBuilder(new Pose2d(11.75, 63.27, Math.toRadians(270.00)))
-                .splineTo(new Vector2d(11.61, 35.68), Math.toRadians(270.00))
-                .splineToLinearHeading(new Pose2d(24.56, 43.00, Math.toRadians(270.00)), Math.toRadians(-3.61))
-                .splineToSplineHeading(new Pose2d(48.21, 35.26, Math.toRadians(180)), Math.toRadians(2.20))
-//                                 .splineToLinearHeading(new Pose2d(18.65, 15.32, Math.toRadians(180)), Math.toRadians(182.68))
-                .splineToLinearHeading(new Pose2d(1.48, 9.39, Math.toRadians(180)), Math.toRadians(185.44))
-                .splineToLinearHeading(new Pose2d(-14.57, 9.39, Math.toRadians(180)), Math.toRadians(178.96))
-                .splineToLinearHeading(new Pose2d(-42.16, 9.39, Math.toRadians(180)), Math.toRadians(178.96))
-                .splineToLinearHeading(new Pose2d(-61.72, 36.11, Math.toRadians(180)), Math.toRadians(180.00))
-                .splineToLinearHeading(new Pose2d(-58.06, 43.14,  Math.toRadians(180)), Math.toRadians(6.34))
-                .splineToLinearHeading(new Pose2d(-35.54, 9.39,  Math.toRadians(180)), Math.toRadians(2.39))
-                .splineToLinearHeading(new Pose2d(-3.17, 9.39,  Math.toRadians(180)), Math.toRadians(-2.16))
-                .splineToLinearHeading(new Pose2d(9.78, 9.39,  Math.toRadians(180)), Math.toRadians(-2.20))
-                .splineToLinearHeading(new Pose2d(27.10, 9.39,  Math.toRadians(180)), Math.toRadians(-2.20))
-                .splineToLinearHeading(new Pose2d(48.49, 37.37,  Math.toRadians(180)), Math.toRadians(0.00))
-                .splineToLinearHeading(new Pose2d(62.85, 62.43,  Math.toRadians(180)), Math.toRadians(41.42))
-                .build();
-
-        drive.setPoseEstimate(untitled0.start());
 
         waitForStart();
 
