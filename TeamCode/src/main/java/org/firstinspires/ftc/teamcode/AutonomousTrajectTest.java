@@ -75,13 +75,13 @@ public class AutonomousTrajectTest extends LinearOpMode {
                 .splineTo(new Vector2d(-59.81, 4.12), Math.toRadians(90.00))
                 .splineTo(new Vector2d(-61.78, 11.70), Math.toRadians(184.48))
                 .build();
-        drive.setPoseEstimate(new Pose2d(11.47, -34.28, 270));
+//        drive.setPoseEstimate(untitled0.start());
 
         waitForStart();
         if (isStopRequested()) return;
 
 //        drive.turn(Math.toRadians(90));
-//        drive.followTrajectory(untitled1);
+        drive.followTrajectory(drive.trajectoryBuilder(new Pose2d()).forward(30).build());
 
 //        Pose2d poseEstimate = drive.getPoseEstimate();
 //        telemetry.addData("finalX", poseEstimate.getX());

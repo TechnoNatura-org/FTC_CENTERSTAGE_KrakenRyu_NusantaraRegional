@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.drive.PID;
 public class flipperPID extends LinearOpMode {
 
     private DcMotorEx flipper;
-    public static PIDCoefficients PIDCoef = new PIDCoefficients(0.00001,0.000002,0.007);
+    public static PIDCoefficients PIDCoef = new PIDCoefficients(0.1,0.0002,0.007);
 
     public static PIDFController PID_CONTROLLER = new PIDFController(PIDCoef);
     public static PID localPID = new PID(PIDCoef, 2.0);
@@ -37,6 +37,8 @@ public class flipperPID extends LinearOpMode {
         flipper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         flipper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+//        localPID.setMotor(flipper);
+
         flipper.setDirection(DcMotorSimple.Direction.REVERSE);
         localPID.setPID(PIDCoef);
         localPID.setTargetPos(140);
@@ -44,7 +46,7 @@ public class flipperPID extends LinearOpMode {
         telemetry.addData("Flippr Command", "Initialised");
 
         telemetry.addData("Flipper Target Pos", "Initialised");
-        telemetry.addData("Lifter Local PID Target Pos", "Initialised");
+//        telemetry.addData("Lifter Local PID Target Pos", "Initialised");
 
         telemetry.addData("Last Error ", "Initialised");
         telemetry.addData("command ", "Initialised");
@@ -53,33 +55,33 @@ public class flipperPID extends LinearOpMode {
 
         telemetry.addData("Status ", "Done Configuring PID!");
 
-
-        while (opModeIsActive() && !isStopRequested()) {
-            if (flipper.getCurrentPosition() <= 140 && flipper.getCurrentPosition() == 140 && localPID.getTargetPos() != 0) {
-                sleep(2000);
-                localPID.setTargetPos(-40);
-            }else if (flipper.getCurrentPosition() >= -40 && flipper.getCurrentPosition() == -40 && localPID.getTargetPos() != 140) {
-                sleep(2000);
-
-                localPID.setTargetPos(140);
-            }
-
-
-
-            double command  = localPID.update(flipper.getCurrentPosition());
-
-            flipper.setPower(command);
+        telemetry.clearAll();
+        while (opModeIsActive()) {
+//            if (flipper.getCurrentPosition() <= -140 && flipper.getTargetPosition() == -140 && localPID.getTargetPos() != 0) {
+//                sleep(2000);
+//                localPID.setTargetPos(40);
+//            }else if (flipper.getCurrentPosition() >= -40 && flipper.getCurrentPosition() == -40 && localPID.getTargetPos() != 140) {
+//                sleep(2000);
 //
-//            flipper.setPower(1);
+//                localPID.setTargetPos(160);
+//            }
+
+
+
+            double doublecommand  = localPID.update(flipper.getCurrentPosition());
+//
+            flipper.setPower(doublecommand);
+////
+////            flipper.setPower(1);
 
             telemetry.addData("Flipper Pos", flipper.getCurrentPosition());
-            telemetry.addData("Flippr Command", command);
+            telemetry.addData("Flippr Command", doublecommand);
 
             telemetry.addData("Flipper Target Pos", localPID.getTargetPos());
             telemetry.addData("Lifter Local PID Target Pos", localPID.getTargetPos());
 
             telemetry.addData("Last Error ", localPID.getError());
-            telemetry.addData("command ", command);
+//            telemetry.addData("command ", doublecommand);
 
             telemetry.update();
         }

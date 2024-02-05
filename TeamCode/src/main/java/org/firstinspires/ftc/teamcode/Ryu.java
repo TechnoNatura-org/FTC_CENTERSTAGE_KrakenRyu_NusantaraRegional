@@ -28,6 +28,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -42,8 +43,8 @@ import org.firstinspires.ftc.teamcode.drive.PID;
 
 public class Ryu extends OpMode
 {
-    public static PIDCoefficients LIFTERS_PIDC = new PIDCoefficients(0.1,0 ,0);
-    public static PIDFController LIFTERS_PID_CONTROLLER = new PIDFController(LIFTERS_PIDC, 1, 1,1);
+//    public static PIDCoefficients LIFTERS_PIDC = new PIDCoefficients(0.1,0 ,0);
+//    public static PIDFController LIFTERS_PID_CONTROLLER = new PIDFController(LIFTERS_PIDC, 1, 1,1);
 
 
     // Declare OpMode members.
@@ -60,13 +61,17 @@ public class Ryu extends OpMode
     private DcMotor lifter2 = null;
 
     private Servo flipper2 = null;
-    private Servo droneLauncher = null;
+    private CRServo droneLauncher = null;
     private Servo pixelServo = null;
 
     private double defspeed = 0;
 
-    public static PIDCoefficients Flipper_PIDCoef = new PIDCoefficients(0.00001,0.000002,0.007);
+    public static PIDCoefficients Flipper_PIDCoef = new PIDCoefficients(0.1,0.0002,0.007);
     public static PID flipper_PID = new PID(Flipper_PIDCoef, 2.0);
+
+    public static PIDCoefficients Lifter_PIDCoef = new PIDCoefficients(0.1,0,0);
+    public static PID Lifter_PID = new PID(Lifter_PIDCoef, 2.0);
+
 
     /*
      * Code to run ONCE when the driver hits INIT
@@ -83,16 +88,20 @@ public class Ryu extends OpMode
         backright  = hardwareMap.get(DcMotor.class, "backright");
         backleft = hardwareMap.get(DcMotor.class, "backleft");
 
-        flipper = hardwareMap.get(DcMotor.class, "flipper");
-        flipper2 = hardwareMap.get(Servo.class, "flipper2");
-
-        droneLauncher = hardwareMap.get(Servo.class, "droneLauncher");
+//        flipper = hardwareMap.get(DcMotor.class, "flipper");
+//        flipper2 = hardwareMap.get(Servo.class, "flipper2");
+//
+//        flipper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        flipper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//
+//
+//        droneLauncher = hardwareMap.get(CRServo.class, "droneLauncher");
         pixelServo = hardwareMap.get(Servo.class, "pixelServo");
-
-        intake = hardwareMap.get(DcMotor.class, "intake");
-
-        lifter1 = hardwareMap.get(DcMotor.class, "lifter1");
-        lifter2 = hardwareMap.get(DcMotor.class, "lifter2");
+//
+//        intake = hardwareMap.get(DcMotor.class, "intake");
+//
+//        lifter1 = hardwareMap.get(DcMotor.class, "lifter1");
+//        lifter2 = hardwareMap.get(DcMotor.class, "lifter2");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -102,18 +111,21 @@ public class Ryu extends OpMode
         backleft.setDirection(DcMotor.Direction.FORWARD);
         backright.setDirection(DcMotor.Direction.REVERSE);
 
-        flipper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        flipper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        flipper.setDirection(DcMotor.Direction.REVERSE);
-
-        lifter2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lifter1.setDirection(DcMotor.Direction.REVERSE);
+//        flipper.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        flipper.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        flipper.setDirection(DcMotor.Direction.REVERSE);
+//
+//        lifter2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        lifter1.setDirection(DcMotor.Direction.REVERSE);
 
 //        lifter2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+        telemetry.addData("Lifter 2 Pos", "Initialized");
+
     }
+
 
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
@@ -148,61 +160,80 @@ public class Ryu extends OpMode
         backleft.setPower(Range.clip(turn + drive - slide, -1.0, 1.0) * defspeed);
 
 
-        if (gamepad2.a){
-            flipper_PID.enablePID();
-            flipper_PID.setTargetPos(140);
-        }else if (gamepad2.y){
-            flipper_PID.enablePID();
-            flipper_PID.setTargetPos(-140);
-        }
+//        if (gamepad2.a){
+//            flipper_PID.enablePID();
+//            flipper_PID.setTargetPos(140);
+//        }else
 
+//        if (gamepad2.b){
+//            flipper_PID.enablePID();
+//            flipper_PID.setTargetPos(170);
+//        }
+//        if (gamepad2.a){
+//            Lifter_PID.enablePID();
+//            Lifter_PID.setTargetPos(0);
+//        }
 
+        double left_stick_y = gamepad2.left_stick_y;
 
-        if (flipper_PID.isPIDEnabled()) {
+        if (flipper_PID.isPIDEnabled() && flipper_PID.isPIDRunning) {
             double flipperCommand = flipper_PID.update(flipper.getCurrentPosition());
-            flipper.setPower(flipperCommand);
+//            flipper.setPower(flipperCommand);
         }else {
-            if (gamepad2.dpad_up) {
+//            if (gamepad2.dpad_up) {
                 flipper_PID.disablePID();
                 flipper_PID.setTargetPos(0);
-                flipper.setPower(0.4);
-            }else if (gamepad2.dpad_down) {
-                flipper_PID.disablePID();
-                flipper_PID.setTargetPos(0);
-                flipper.setPower(-0.4);
-            }
+//                flipper.setPower(left_stick_y);
+//            }else if (gamepad2.dpad_down) {
+//                flipper_PID.disablePID();
+//                flipper_PID.setTargetPos(0);
+//                flipper.setPower(-0.4);
+//            }
         }
 
-        if (gamepad1.right_bumper){
-            intake.setPower(1.0);
-        }else if (gamepad1.left_bumper){
-            intake.setPower(-1.0);
-        }else{
-            intake.setPower(0.0);
+        if (gamepad1.y) {
+            pixelServo.setPosition(1);
+        }else if (gamepad1.a) {
+            pixelServo.setPosition(0);
         }
+
+//        if (gamepad1.right_bumper){
+//            intake.setPower(1.0);
+//        }else if (gamepad1.left_bumper){
+//            intake.setPower(-1.0);
+//        }else{
+//            intake.setPower(0.0);
+//        }
 
         //lifter
-        if(gamepad2.right_stick_y > 0){
-            lifter1.setPower(gamepad2.right_stick_y);
-            lifter2.setPower(gamepad2.right_stick_y);
-        }else if(gamepad2.right_stick_y < 0){
-            lifter1.setPower(gamepad2.right_stick_y);
-            lifter2.setPower(gamepad2.right_stick_y);
-        }else{
-            lifter1.setPower(0);
-            lifter2.setPower(0);
-        }
+//        if(gamepad2.right_stick_y > 0){
+//            lifter1.setPower(-gamepad2.right_stick_y);
+//            lifter2.setPower(-gamepad2.right_stick_y);
+//        }else if(gamepad2.right_stick_y < 0){
+//            lifter1.setPower(-gamepad2.right_stick_y);
+//            lifter2.setPower(-gamepad2.right_stick_y);
+//        }else{
+//            lifter1.setPower(0);
+//            lifter2.setPower(0);
+//        }
 
-        if (gamepad2.b){
-            flipper2.setPosition(0.10);
-        }else if (gamepad2.x) {
-            flipper2.setPosition(0.4);
-        }
+
+//        if (gamepad1.b){
+//            droneLauncher.setPower(1);
+//        }else if (gamepad1.x) {
+//            droneLauncher.setPower(0.5);
+//        }
+//
+//        if (gamepad2.right_trigger > 0){
+//            flipper2.setPosition(0.10);
+//        }else {
+//            flipper2.setPosition(0.4);
+//        }
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
-        // telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+//        telemetry.addData("Lifter 2 Pos", lifter2.getCurrentPosition());
     }
 
     /*

@@ -8,6 +8,8 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class PID {
     private ElapsedTime timer;
     private double reference;
@@ -24,12 +26,12 @@ public class PID {
     private boolean isEnabled = true;
 
 
-    public PID(double kP, double kI, double kD, double tolerance) {
+    public PID(double kP, double kI, double kD, double toleranceParameter) {
         timer = new ElapsedTime();
         Kp = kP;
         Ki = kI;
         Kd = kD;
-        tolerance= tolerance;
+        tolerance= toleranceParameter;
     }
 
     public PID(double kP, double kI, double kD) {
@@ -46,16 +48,17 @@ public class PID {
         Kd = PIDCo.kD;
 //        tolerance= tolerance;
     }
-    public PID(PIDCoefficients PIDCo, double tolerance) {
+    public PID(PIDCoefficients PIDCo, double toleranceParameter) {
         timer = new ElapsedTime();
         Kp = PIDCo.kP;
         Ki = PIDCo.kI;
         Kd = PIDCo.kD;
-        tolerance= tolerance;
+        tolerance= toleranceParameter;
     }
 
-    public void setMotor(DcMotorEx motor) {
-        motor = motor;
+    public void setMotor(DcMotorEx motorTarget) {
+        motor = motorTarget;
+        return;
     }
 
     public void setPID(PIDCoefficients PIDCo) {
@@ -86,6 +89,21 @@ public class PID {
     }
     public void setTargetPos(double target) {
         reference = target;
+        isPIDRunning = true;
+
+        startPID();
+
+        if (motor != null) {
+            do {
+                double motorPos = motor.getCurrentPosition();
+                double command = update(motorPos);
+
+                motor.setPower(command);
+            } while (isPIDRunning);
+        }
+    }
+    public void setTargetPos(double target, Telemetry telemetry) {
+        reference = target;
         startPID();
 
         if (motor != null) {
@@ -112,7 +130,7 @@ public class PID {
             isPIDRunning = false;
             return 0;
         }else {
-            if (isPIDRunning == false) {
+            if (!isPIDRunning) {
                 isPIDRunning = true;
             }
         }
